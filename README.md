@@ -2,6 +2,14 @@
 
 Rapport Power BI de portfolio construit sur le dataset public **Olist** (marketplace e-commerce brésilienne) : ~99 400 commandes passées entre septembre 2016 et octobre 2018, avec clients, produits, vendeurs, paiements et avis.
 
+## Question traitée
+
+« Comment se portent nos ventes et notre logistique, et quel est leur impact sur la satisfaction client ? »
+
+Storytelling du rapport (4 pages) : combien on vend → comment se passe la livraison → le client est-il content. Angle volontairement différent du projet Gironde, pour démontrer d'autres compétences (modélisation multi-tables, DAX, analyse logistique).
+
+**Hors périmètre, volontairement :** ce rapport ne répond pas à "quels clients ou produits rapportent le plus" — aucun visuel de CA par client, et le CA par produit ne descend pas sous le niveau catégorie (le dataset ne contient pas de nom de produit, voir Limites connues). La mesure `Nb clients uniques` existe dans le modèle mais reste orpheline (non utilisée dans un visuel). C'est une limite assumée plutôt qu'un oubli : à ouvrir en piste d'évolution (ex. table "Top clients par CA net", directement exploitable puisque `Fact_Orders ↔ Dim_Customers` est déjà bidirectionnelle).
+
 **Rapport interactif en ligne :** https://app.powerbi.com/view?r=eyJrIjoiMTMwMDkyZjQtZjUwYi00YjJmLWIyZDItNTcyMjA4MWY1MGQ2IiwidCI6ImU1ZDE1MDY5LTQxYTItNDhiZS1hM2YzLWQ3ZjUyZGIxNjQyNSIsImMiOjh9&pageName=3fb0a0b572a2e8a79337
 
 Le fichier `.pbix` source est disponible dans l'onglet [**Releases**](https://github.com/Vigorovich/portfolio-ecommerce-olist-powerbi/releases/tag/v1.0.0) de ce repo (trop volumineux pour l'arborescence de fichiers standard de GitHub). Ce README documente la construction technique du modèle (relations, mesures DAX, logique des visuels), pour quiconque veut explorer la fabrication du rapport plutôt que seulement son rendu.
@@ -21,6 +29,8 @@ Le fichier `.pbix` source est disponible dans l'onglet [**Releases**](https://gi
 | `olist_sellers_dataset` | 1 vendeur | 3 095 | Dimension vendeur |
 | `product_category_name_translation` | 1 catégorie | 71 | Traduction PT → EN des catégories |
 
+En complément, une table **`Dim_EtatsBresil`** (27 lignes, construite manuellement — ne fait pas partie des CSV Kaggle) : `state_code` (2 lettres, ex. `SP`), `state_name` (nom complet, ex. `São Paulo`), `state_name_ascii` (sans accents), `latitude`, `longitude`. Elle traduit les codes d'état bruts (`customer_state`) en noms lisibles pour les tableaux, et fournit les coordonnées utilisées par les visuels carte.
+
 ## Modèle de données
 
 Modèle en étoile, `Fact_Orders` au centre :
@@ -28,8 +38,8 @@ Modèle en étoile, `Fact_Orders` au centre :
 ```
 Dim_Customers (1) ──────────────► (*) Fact_Orders[customer_id]
 
-Fact_Orders (1) ────────────────► (*) Fact_OrdersItems[order_id]
-Fact_Orders (1) ────────────────► (*) Fact_OrderPayments[order_id]
+Fact_Orders (1) ─────────────────► (*) Fact_OrdersItems[order_id]
+Fact_Orders (1) ─────────────────► (*) Fact_OrderPayments[order_id]
 Fact_Orders (1) ─────────────────► (*) Fact_OrderReviews[order_id]
 
 Dim_Products (1) ────────────────► (*) Fact_OrdersItems[product_id]
@@ -38,6 +48,8 @@ Dim_Products[product_category_name] (1) ──► (*) Dim_CategoryTranslation[pr
 Dim_Sellers (1) ──────────────────► (*) Fact_OrdersItems[seller_id]
 
 Dim_Dates (1) ────────────────────► (*) Fact_Orders[order_purchase_date]
+
+Dim_EtatsBresil[state_code] (1) ──► (*) Dim_Customers[customer_state]
 ```
 
 **Sens de filtrage (point important du modèle) :** seules deux relations sont en filtrage croisé bidirectionnel ("Les deux") :
