@@ -4,7 +4,7 @@ Rapport Power BI de portfolio construit sur le dataset public **Olist** (marketp
 
 **Rapport interactif en ligne :** https://app.powerbi.com/view?r=eyJrIjoiMTMwMDkyZjQtZjUwYi00YjJmLWIyZDItNTcyMjA4MWY1MGQ2IiwidCI6ImU1ZDE1MDY5LTQxYTItNDhiZS1hM2YzLWQ3ZjUyZGIxNjQyNSIsImMiOjh9&pageName=3fb0a0b572a2e8a79337
 
-Ce repo contient le fichier `.pbix` source et la documentation technique du modèle (relations, mesures DAX, logique des visuels), pour quiconque veut explorer la construction du rapport plutôt que seulement son rendu.
+Le fichier `.pbix` source est disponible dans l'onglet [**Releases**](https://github.com/Vigorovich/portfolio-ecommerce-olist-powerbi/releases/tag/v1.0.0) de ce repo (trop volumineux pour l'arborescence de fichiers standard de GitHub). Ce README documente la construction technique du modèle (relations, mesures DAX, logique des visuels), pour quiconque veut explorer la fabrication du rapport plutôt que seulement son rendu.
 
 ## Le jeu de données
 
@@ -26,11 +26,11 @@ Ce repo contient le fichier `.pbix` source et la documentation technique du mod�
 Modèle en étoile, `Fact_Orders` au centre :
 
 ```
-Dim_Customers (1) ─────────────► (*) Fact_Orders[customer_id]
+Dim_Customers (1) ──────────────► (*) Fact_Orders[customer_id]
 
 Fact_Orders (1) ────────────────► (*) Fact_OrdersItems[order_id]
-Fact_Orders (1) ─────────────────► (*) Fact_OrderPayments[order_id]
-Fact_Orders (1) ────────────────► (*) Fact_OrderReviews[order_id]
+Fact_Orders (1) ────────────────► (*) Fact_OrderPayments[order_id]
+Fact_Orders (1) ─────────────────► (*) Fact_OrderReviews[order_id]
 
 Dim_Products (1) ────────────────► (*) Fact_OrdersItems[product_id]
 Dim_Products[product_category_name] (1) ──► (*) Dim_CategoryTranslation[product_category_name]
