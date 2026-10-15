@@ -6,7 +6,7 @@ Rapport Power BI de portfolio construit sur le dataset public **Olist** (marketp
 
 « Comment se portent nos ventes et notre logistique, et quel est leur impact sur la satisfaction client ? »
 
-Storytelling du rapport (4 pages) : combien on vend → comment se passe la livraison → le client est-il content. Angle volontairement différent du projet Gironde, pour démontrer d'autres compétences (modélisation multi-tables, DAX, analyse logistique).
+Storytelling du rapport (4 pages) : combien on vend → comment se passe la livraison → le client est-il content.
 
 **Hors périmètre, volontairement :** ce rapport ne répond pas à "quels clients ou produits rapportent le plus" — aucun visuel de CA par client, et le CA par produit ne descend pas sous le niveau catégorie (le dataset ne contient pas de nom de produit, voir Limites connues). La mesure `Nb clients uniques` existe dans le modèle mais reste orpheline (non utilisée dans un visuel). C'est une limite assumée plutôt qu'un oubli : à ouvrir en piste d'évolution (ex. table "Top clients par CA net", directement exploitable puisque `Fact_Orders ↔ Dim_Customers` est déjà bidirectionnelle).
 
